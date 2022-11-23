@@ -1,0 +1,152 @@
+Description of the shell: 
+
+Internal commands -- cd, pwd, echo, exit
+cd options: cd "dir_name"
+            cd -L "dir_name"
+            cd -P "dir_name"
+            cd --help
+
+pwd options: pwd
+             pwd -L
+             pwd -P
+             pwd --help
+
+echo options: echo "string"
+              echo -n "string"
+              echo -E "string"
+
+exit: To eit the command line or shell
+
+External commands -- mkdir, rm, date, cat, ls
+mkdir options: mkdir "folder name"
+               mkdir -v "folder name"
+               mkdir --version
+
+rm options: rm "file name"
+            rm -v "file name"
+            rm -d "directory name"
+
+date options: date
+              date -U
+              date -R 
+
+cat options: cat "filename"
+             cat -E "filename"
+             cat -T "filename"
+
+ls options: ls
+            ls -a
+            ls -m
+            ls --version
+
+These all commands are handled with fork, wait and execvp
+If we &t is written and then these commands are executed then
+they will be executed by pthread_create, system, pthread_join
+
+All the corner cases are handled and program is running succesfully
+             
+
+Assumption: I assumed that the present working directory is not to be shown everytime. I just showed @> everytime in the shell.
+            we can get present working directory by pwd command.
+
+
+Corner cases:
+1. If the user enter nothing there will be continuation
+2. If user enters the command which is not present in Description, shell will show Invalid Input.
+3. If the user enters the wrong option of the command it shows Invalid Input -- option
+4. If the user enters wrong or invalid directory it shows Error : No such file or directory
+
+
+Test case:
+// Internal commands
+cd ..
+pwd
+cd -P assignment1
+pwd
+
+cd --help
+pwd -L
+pwd -p
+pwd --help
+cd -L assignment1
+
+echo
+echo hello
+echo -n hello
+echo -E hello
+
+// same with pthreads
+&t cd ..
+&t pwd
+&t cd assignment1
+&t pwd
+
+&t cd --help
+&t pwd -L
+&t pwd -p
+&t pwd --help
+&t cd -L assignment1
+
+&t echo
+&t echo hello
+&t echo -n hello
+&t echo -E hello
+
+exit
+
+// External commands
+date 
+date -U 
+date -R 
+
+ls 
+ls -a
+ls -m
+ls --version
+
+cat cat.c
+cat -E cat.c
+cat -T cat.c
+
+mkdir hello
+rm -d hello
+mkdir -v hello
+rm -d hello
+mkdir --version 
+
+// new.txt and new1.txt will be created
+rm -v new.txt 
+rm new1.txt
+
+exit
+
+// with pthreading
+
+&t date 
+&t date -U 
+&t date -R 
+
+&t ls 
+&t ls -a
+&t ls -m
+&t ls --version
+
+exit
+
+&t cat cat.c
+&t cat -E cat.c
+&t cat -T cat.c
+
+&t mkdir hello
+&t rm -d hello
+&t mkdir -v hello
+&t rm -d hello
+&t mkdir --version 
+
+exit
+
+// new.txt and new1.txt will be created
+&t rm -v new.txt 
+&t rm new1.txt
+
+exit
